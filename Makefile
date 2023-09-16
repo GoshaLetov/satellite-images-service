@@ -1,11 +1,10 @@
 DOCKER_TAG := latest
 DOCKER_IMAGE := service
-DOCKER_PORT := 5000
-INTERNAL_PORT := 5050
+DOCKER_PORT := 4000
+INTERNAL_PORT := 4040
 
 run_app:
-	PYTHONPATH=. python src/app.py
-
+	python -m uvicorn src.app:main --host='0.0.0.0' --port=$(DOCKER_PORT)
 
 docker_build:
 	docker build \

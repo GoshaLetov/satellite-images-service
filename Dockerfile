@@ -19,6 +19,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 1234
+EXPOSE 4000
 
 CMD make run_app

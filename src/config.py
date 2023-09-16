@@ -1,11 +1,10 @@
 from omegaconf import OmegaConf
 from pydantic import BaseModel
+
 from src import planet
 
 
 class ServiceConfig(BaseModel):
-    host: str
-    port: int
     planet: planet.Config
 
     @classmethod

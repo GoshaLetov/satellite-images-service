@@ -7,7 +7,7 @@ from src.planet.container import Container
 from src.planet.services import PlanetImageClassifier, Service
 from src.planet.schemas import LabelsOutput, PredictOutput, PredictProbaOutput
 
-router = APIRouter()
+router = APIRouter(prefix='/planet', tags=['planet'])
 
 
 def _bytes2image(image: bytes):
