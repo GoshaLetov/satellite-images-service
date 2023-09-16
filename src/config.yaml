@@ -1,0 +1,26 @@
+host: '127.0.0.1'
+port: 5000
+planet:
+  onnx_path: 'models/planet_classifier.onnx'
+  provider: 'CPUExecutionProvider'
+  width: 224
+  height: 224
+  threshold: 0.5
+  labels:
+    - 'agriculture'
+    - 'artisinal_mine'
+    - 'bare_ground'
+    - 'blooming'
+    - 'blow_down'
+    - 'clear'
+    - 'cloudy'
+    - 'conventional_mine'
+    - 'cultivation'
+    - 'habitation'
+    - 'haze'
+    - 'partly_cloudy'
+    - 'primary'
+    - 'road'
+    - 'selective_logging'
+    - 'slash_burn'
+    - 'water'
