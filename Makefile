@@ -1,13 +1,6 @@
 APP_PORT := 5000
 APP_HOST := '0.0.0.0'
-
-CI_DOCKER_REGISTRY := registry.deepschool.ru/cvr-aug23/k.khvoshchev/hw-01-service
-CI_DOCKER_REGISTRY_USER := k.khvoshchev
-CI_DOCKER_REGISTRY_PASSWORD := fz1488IopC
-
 SERVICE_PORT := 4000
-DOCKER_IMAGE := $(CI_DOCKER_REGISTRY)/service
-DOCKER_TAG := latest
 
 .PHONY: start
 start:
