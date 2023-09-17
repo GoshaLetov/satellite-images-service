@@ -1,20 +1,47 @@
+APP_PORT := 5000
+APP_HOST := '0.0.0.0'
+
+CI_DOCKER_REGISTRY := registry.deepschool.ru/cvr-aug23/k.khvoshchev/hw-01-service
+CI_DOCKER_REGISTRY_USER := k.khvoshchev
+CI_DOCKER_REGISTRY_PASSWORD := fz1488IopC
+
+SERVICE_PORT := 4000
+DOCKER_IMAGE := $(CI_DOCKER_REGISTRY)/service
 DOCKER_TAG := latest
-DOCKER_IMAGE := service
-DOCKER_PORT := 4000
-INTERNAL_PORT := 4040
 
-run_app:
-	python -m uvicorn src.app:main --host='0.0.0.0' --port=$(DOCKER_PORT)
+.PHONY: start
+start:
+	python -m uvicorn src.app:main --host=$(APP_HOST) --port=$(APP_PORT)
 
-docker_build:
-	docker build \
-		--tag ${DOCKER_IMAGE}:${DOCKER_TAG} .
+.PHONY: build
+build:
+	docker build --tag $(DOCKER_IMAGE):$(DOCKER_TAG) .
 
-docker_run:
+.PHONY: push
+push:
+	docker login -u $(CI_DOCKER_REGISTRY_USER) -p $(CI_DOCKER_REGISTRY_PASSWORD) $(CI_DOCKER_REGISTRY)
+	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+
+.PHONY: deploy
+deploy:
+	ansible-playbook -i deploy/inventory.ini deploy/deploy.yml \
+		-e docker_image=$(DOCKER_IMAGE) \
+		-e docker_tag=$(DOCKER_TAG) \
+		-e docker_registry=$(CI_DOCKER_REGISTRY) \
+		-e docker_registry_user=$(CI_DOCKER_REGISTRY_USER) \
+		-e docker_registry_password=$(CI_DOCKER_REGISTRY_PASSWORD)
+
+.PHONY: destroy
+destroy:
+	ansible-playbook -i deploy/inventory.ini deploy/destroy.yml
+
+.PHONY: run
+run:
 	docker run \
 		--detach \
-		--publish ${INTERNAL_PORT}:${DOCKER_PORT} \
-		--name ${DOCKER_IMAGE}_${INTERNAL_PORT} ${DOCKER_IMAGE}:${DOCKER_TAG}
+		--publish $(SERVICE_PORT):$(APP_PORT) \
+		--name $(DOCKER_TAG).$(INTERNAL_PORT) $(DOCKER_IMAGE):$(DOCKER_TAG)
 
+.PHONY: lint
 lint:
 	flake8 src/

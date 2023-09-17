@@ -8,3 +8,4 @@ lint:
   script:
     - pip install wemake-python-styleguide
     - flake8 src/
+

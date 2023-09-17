@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM --platform=linux/amd64 python:3.10
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -11,14 +11,15 @@ RUN apt-get update && \
     libsm6 \
     libxext6
 
-WORKDIR /hw-02-service
+WORKDIR /hw-01-service
 
 COPY requirements.txt requirements.txt
+
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 4000
+EXPOSE 5000
 
-CMD make run_app
+CMD make start
