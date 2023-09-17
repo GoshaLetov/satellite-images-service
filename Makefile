@@ -1,6 +1,5 @@
 APP_PORT := 5000
 APP_HOST := '0.0.0.0'
-SERVICE_PORT := 4000
 
 .PHONY: start
 start:
@@ -27,14 +26,3 @@ deploy:
 .PHONY: destroy
 destroy:
 	ansible-playbook -i deploy/inventory.ini deploy/destroy.yml
-
-.PHONY: run
-run:
-	docker run \
-		--detach \
-		--publish $(SERVICE_PORT):$(APP_PORT) \
-		--name $(DOCKER_TAG).$(INTERNAL_PORT) $(DOCKER_IMAGE):$(DOCKER_TAG)
-
-.PHONY: lint
-lint:
-	flake8 src/

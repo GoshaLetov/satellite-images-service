@@ -61,13 +61,3 @@ destroy:
 
   when: manual
   <<: *ssh_key_template
-
-
-
-
-
-lint:
-  stage: lint
-  script:
-    - pip install wemake-python-styleguide
-    - flake8 src/
