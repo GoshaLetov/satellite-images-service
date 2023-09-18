@@ -12,29 +12,28 @@ APP_HOST := '0.0.0.0'
 start:
 	python -m uvicorn src.app:main --host=$(APP_HOST) --port=$(APP_PORT)
 
-# To run locally specify `Docker Image` variables
 .PHONY: build
 build:
 	docker build --tag $(DOCKER_IMAGE):$(DOCKER_TAG) .
 
-# To run locally specify `GitLab Registry` variables
-.PHONY: push
-push:
-	docker login -u $(CI_REGISTRY_USER) -p $(CI_REGISTRY_PASSWORD) $(CI_REGISTRY)
-	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
-
 # PORTS: 4000 -> $(APP_PORT)
-# To run locally specify `Docker Image` variables
 .PHONY: run
 run:
 	docker run \
 		--detach \
 		--publish 4000:$(APP_PORT) \
-		--name k.khvoshchev..hw1.service.4000 \
+		--name k.khvoshchev.hw1.service.4000 \
 		--restart always \
 		$(DOCKER_IMAGE):$(DOCKER_TAG)
 
-# To run locally specify `Docker Image` and `GitLab Registry` variables
+.PHONY: login
+login:
+	docker login -u $(CI_REGISTRY_USER) -p $(CI_REGISTRY_PASSWORD) $(CI_REGISTRY)
+
+.PHONY: pull
+pull:
+	docker pull $(DOCKER_IMAGE):latest || true
+
 .PHONY: deploy
 deploy:
 	ansible-playbook -i deploy/inventory.ini deploy/deploy.yml \
