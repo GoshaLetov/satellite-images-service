@@ -63,3 +63,7 @@ tests:
 .PHONY: lint
 lint:
 	flake8 src/
+
+.PHONY: download
+download:
+	dvc pull -R models/

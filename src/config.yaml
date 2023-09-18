@@ -1,5 +1,5 @@
 planet:
-  onnx_path: 'models/planet/classifier.onnx'
+  onnx_path: 'models/planet/classifier/best.onnx'
   provider: 'CPUExecutionProvider'
   width: 224
   height: 224
