@@ -21,8 +21,5 @@ class ONNXPlanetImageValidator(PlanetImageValidator):
 
 class FakePlanetImageValidator(PlanetImageValidator):
 
-    def __init__(self, config: Config) -> None:
-        ...
-
     def is_image_valid(self, image: np.ndarray) -> bool:
         return True

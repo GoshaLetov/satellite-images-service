@@ -2,7 +2,7 @@ from dependency_injector import containers, providers
 from src.planet.services import (
     ONNXPlanetImageClassifier,
     ONNXPlanetImageValidator,
-    Service,
+    PlanetImageAnalytics,
 )
 
 
@@ -11,16 +11,16 @@ class Container(containers.DeclarativeContainer):
 
     classifier = providers.Singleton(
         ONNXPlanetImageClassifier,
-        config=config.planet
+        config=config.planet,
     )
 
     validator = providers.Singleton(
         ONNXPlanetImageValidator,
-        config=config.planet
+        config=config.planet,
     )
 
-    service = providers.Singleton(
-        Service,
+    analytics = providers.Singleton(
+        PlanetImageAnalytics,
         classifier=classifier,
         validator=validator,
     )

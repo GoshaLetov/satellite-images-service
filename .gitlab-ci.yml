@@ -6,6 +6,7 @@ variables:
 
 stages:
   - build
+  - lint
   - tests
   - deploy
 
@@ -39,6 +40,36 @@ build:
     - docker push $DOCKER_IMAGE:$DOCKER_TAG
     - docker push $DOCKER_IMAGE:latest
 
+unit:
+  stage: tests
+  <<: *docker_common
+  script:
+    - *docker_login
+    - docker pull $DOCKER_IMAGE:$DOCKER_TAG
+    - docker run $DOCKER_IMAGE:$DOCKER_TAG bash -c 'make tests_unit'
+  needs:
+    - build
+
+integration:
+  stage: tests
+  <<: *docker_common
+  script:
+    - *docker_login
+    - docker pull $DOCKER_IMAGE:$DOCKER_TAG
+    - docker run $DOCKER_IMAGE:$DOCKER_TAG bash -c 'make tests_integration'
+  needs:
+    - build
+
+lint:
+  stage: lint
+  <<: *docker_common
+  script:
+    - *docker_login
+    - docker pull $DOCKER_IMAGE:$DOCKER_TAG
+    - docker run $DOCKER_IMAGE:$DOCKER_TAG bash -c 'make lint'
+  needs:
+    - build
+
 deploy:
   stage: deploy
   variables:
@@ -46,7 +77,6 @@ deploy:
   script:
     - python3 -m pip install ansible==6.0.0
     - make deploy DOCKER_IMAGE=$DOCKER_IMAGE DOCKER_TAG=$DOCKER_TAG
-
   when: manual
   <<: *ssh_key_template
 
@@ -57,8 +87,7 @@ destroy:
   script:
     - python3 -m pip install ansible==6.0.0
     - make destroy
-
+  needs:
+    - deploy
   when: manual
   <<: *ssh_key_template
-
-# TODO: unit_tests, integration_tests, linter

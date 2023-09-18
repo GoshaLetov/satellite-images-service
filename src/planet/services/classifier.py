@@ -59,13 +59,10 @@ class ONNXPlanetImageClassifier(PlanetImageClassifier):
         return [self._labels[label_idx] for label_idx, proba in enumerate(predict) if proba > self._threshold]
 
     def _postprocess_predict_proba(self, predict) -> Dict[str, float]:
-        return {label: proba for label, proba in zip(self._labels, predict)}
+        return dict(zip(self._labels, predict))
 
 
 class FakePlanetImageClassifier(PlanetImageClassifier):
-
-    def __init__(self, config: Config) -> None:
-        ...
 
     def predict(self, image: np.ndarray) -> List[str]:
         return ['label']

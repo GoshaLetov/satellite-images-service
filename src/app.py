@@ -9,7 +9,7 @@ def main() -> FastAPI:
     app = FastAPI()
     config = ServiceConfig.from_yaml(path='src/config.yaml')
 
-    for service in [planet]:
+    for service in (planet, ):
         container = service.Container()
         container.config.from_dict(options=config)
         container.wire(modules=[service.routes])

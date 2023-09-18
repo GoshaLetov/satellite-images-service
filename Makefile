@@ -1,7 +1,9 @@
-#	Variables list:
-#		1) GitLab Registry: CI_REGISTRY, CI_REGISTRY_USER, CI_REGISTRY_PASSWORD
-#		2) Docker Image: DOCKER_IMAGE, DOCKER_TAG
-#		3) Application: APP_HOST, APP_PORT
+#########################################################################################
+#	Variables list:                                                                     #
+#		1) GitLab Registry: CI_REGISTRY, CI_REGISTRY_USER, CI_REGISTRY_PASSWORD         #
+#		2) Docker Image: DOCKER_IMAGE, DOCKER_TAG                                       #
+#		3) Application: APP_HOST, APP_PORT                                              #
+#########################################################################################
 
 APP_PORT := 5000
 APP_HOST := '0.0.0.0'
@@ -10,15 +12,29 @@ APP_HOST := '0.0.0.0'
 start:
 	python -m uvicorn src.app:main --host=$(APP_HOST) --port=$(APP_PORT)
 
+# To run locally specify `Docker Image` variables
 .PHONY: build
 build:
 	docker build --tag $(DOCKER_IMAGE):$(DOCKER_TAG) .
 
+# To run locally specify `GitLab Registry` variables
 .PHONY: push
 push:
 	docker login -u $(CI_REGISTRY_USER) -p $(CI_REGISTRY_PASSWORD) $(CI_REGISTRY)
 	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
 
+# PORTS: 4000 -> $(APP_PORT)
+# To run locally specify `Docker Image` variables
+.PHONY: run
+run:
+	docker run \
+		--detach \
+		--publish 4000:$(APP_PORT) \
+		--name k.khvoshchev..hw1.service.4000 \
+		--restart always \
+		$(DOCKER_IMAGE):$(DOCKER_TAG)
+
+# To run locally specify `Docker Image` and `GitLab Registry` variables
 .PHONY: deploy
 deploy:
 	ansible-playbook -i deploy/inventory.ini deploy/deploy.yml \
@@ -32,4 +48,19 @@ deploy:
 destroy:
 	ansible-playbook -i deploy/inventory.ini deploy/destroy.yml
 
-#TODO: add local docker start command
+.PHONY: tests_unit
+tests_unit:
+	PYTHONPATH=. pytest tests/unit
+
+.PHONY: tests_integration
+tests_integration:
+	PYTHONPATH=. pytest tests/integration
+
+.PHONY: tests
+tests:
+	make tests_integration
+	make tests_unit
+
+.PHONY: lint
+lint:
+	flake8 src/

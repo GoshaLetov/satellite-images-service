@@ -7,10 +7,10 @@ class LabelsOutput(BaseModel):
 
 
 class PredictOutput(BaseModel):
-    is_valid: bool
+    is_image_valid: bool
     labels: List[str]
 
 
 class PredictProbaOutput(BaseModel):
-    is_valid: bool
+    is_image_valid: bool
     probas: Dict[str, float]
