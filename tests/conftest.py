@@ -1,39 +1,39 @@
-import os
 import cv2
 import pytest
 
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from src import planet
-from src.config import ServiceConfig
+from src.config import ClassifierConfig
 
-TESTS_DIR = os.path.dirname(__file__)
+TESTS_DIR = Path(__file__).parent
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def sample_image_bytes():
-    with open(os.path.join(TESTS_DIR, 'images', 'sample.jpg'), 'rb') as image:
-        yield image.read()
+    with open(TESTS_DIR / 'images' / 'sample.jpg', 'rb') as image:
+        yield image
 
 
 @pytest.fixture
 def sample_image_numpy():
     return cv2.cvtColor(
-        src=cv2.imread(filename=os.path.join(TESTS_DIR, 'images', 'sample.jpg')),
+        src=cv2.imread(filename=str(TESTS_DIR / 'images' / 'sample.jpg')),
         code=cv2.COLOR_BGR2RGB,
     )
 
 
 @pytest.fixture(scope='session')
 def app_config():
-    return ServiceConfig.from_yaml(path='src/config.yaml')
+    return ClassifierConfig.from_yaml(path='src/config.yaml')
 
 
 @pytest.fixture
 def planet_container(app_config):
     container = planet.Container()
-    container.config.from_dict(app_config)
+    container.config.from_dict(options=app_config)
     return container
 
 

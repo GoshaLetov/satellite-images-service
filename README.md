@@ -2,55 +2,7 @@
 
 1. Ссылка на сервис: [service](http://91.206.15.25:2099)
 
-2. Описание API:
-
-* Доступные лейблы:
-```
-GET: /planet/labels
-
-Parametrs: No parameters
-
-Example value: 
-{
-  "labels": [
-    "string"
-  ]
-}
-```
-
-* Классификация спутникового снимка - лейблы:
-```
-POST: /planet/predict
-
-Parametrs: Request body: multipart/form-data (.jpeg, .jpg, .png)
-
-Example value: 
-{
-  "is_image_valid": true,
-  "labels": [
-    "string"
-  ]
-}
-```
-
-* Классификация спутникового снимка - вероятности принадлежности к лейблу:
-```
-POST: /planet/predict_proba
-
-Parametrs: Request body: multipart/form-data (.jpeg, .jpg, .png)
-
-Example value: 
-{
-  "is_image_valid": true,
-  "probas": {
-    "additionalProp1": 0,
-    "additionalProp2": 0,
-    "additionalProp3": 0
-  }
-}
-```
-
-___Более подробное описание API в [swagger](http://91.206.15.25:2099/docs)___
+2. Описание API: [swagger](http://91.206.15.25:2099/docs)
 
 3. Запуск сервиса локально:
 ```

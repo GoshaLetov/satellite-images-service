@@ -2,19 +2,18 @@ import uvicorn
 
 from fastapi import FastAPI
 from src import planet
-from src.config import ServiceConfig
+from src.config import ClassifierConfig
 
 
 def main() -> FastAPI:
     app = FastAPI()
-    config = ServiceConfig.from_yaml(path='src/config.yaml')
+    config = ClassifierConfig.from_yaml(path='src/config.yaml')
 
-    for service in (planet, ):
-        container = service.Container()
-        container.config.from_dict(options=config)
-        container.wire(modules=[service.routes])
+    container = planet.Container()
+    container.config.from_dict(options=config)
+    container.wire(modules=[planet.routes])
 
-        app.include_router(router=service.router)
+    app.include_router(router=planet.router)
 
     return app
 

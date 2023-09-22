@@ -12,8 +12,8 @@ def test_predicts_not_fail(planet_container: Container, sample_image_numpy: np.n
 
 def test_prob_less_or_equal_to_one(planet_container: Container, sample_image_numpy: np.ndarray):
     classifier = planet_container.classifier()
-    genre2prob = classifier.predict_proba(image=sample_image_numpy)
-    for prob in genre2prob.values():
+    planet2prob = classifier.predict_proba(image=sample_image_numpy)
+    for prob in planet2prob.values():
         assert prob <= 1
         assert prob >= 0
 
