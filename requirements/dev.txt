@@ -1,3 +1,5 @@
+dvc==3.21.1
+dvc_ssh==2.22.2
 httpx==0.25.0
 pytest==7.4.2
 wemake-python-styleguide==0.18.0
