@@ -16,7 +16,8 @@ WORKDIR /hw-01-service
 COPY requirements/ requirements/
 
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements/prod.txt
+RUN pip install --no-cache-dir -r requirements/dev.txt
 
 COPY . .
 
